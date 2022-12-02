@@ -7,14 +7,22 @@ package texteditor;
 
 import java.awt.Color;
 import java.awt.GraphicsEnvironment;
-import java.io.BufferedReader;
+import java.io.*;
+/*import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Reader;*/
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
@@ -42,7 +50,7 @@ public class Principal extends javax.swing.JFrame {
         doc = tp_texto.getStyledDocument();
         estilo = tp_texto.addStyle("miEstilo", null);
 
-        DefaultComboBoxModel modelo=(DefaultComboBoxModel) cb_font.getModel();
+        DefaultComboBoxModel modelo = (DefaultComboBoxModel) cb_font.getModel();
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         String fontNames[] = ge.getAvailableFontFamilyNames();
         for (int i = 0; i < fontNames.length; i++) {
@@ -74,8 +82,10 @@ public class Principal extends javax.swing.JFrame {
         BtnColorSubrayado = new javax.swing.JButton();
         BtnColorText = new javax.swing.JButton();
         jToolBar2 = new javax.swing.JToolBar();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        BtnGuardar = new javax.swing.JButton();
+        BtnAbrir = new javax.swing.JButton();
+        BtnUrl = new javax.swing.JButton();
+        txtURL = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Editor Texto");
@@ -171,36 +181,57 @@ public class Principal extends javax.swing.JFrame {
                 BtnColorTextMouseClicked(evt);
             }
         });
+        BtnColorText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnColorTextActionPerformed(evt);
+            }
+        });
         jToolBar1.add(BtnColorText);
 
         jToolBar2.setRollover(true);
 
-        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/texteditor/Imagenes/guardar.png"))); // NOI18N
-        jButton6.setFocusable(false);
-        jButton6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton6.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton6.addMouseListener(new java.awt.event.MouseAdapter() {
+        BtnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/texteditor/Imagenes/guardar.png"))); // NOI18N
+        BtnGuardar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        BtnGuardar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        BtnGuardar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton6MouseClicked(evt);
+                BtnGuardarMouseClicked(evt);
             }
         });
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        BtnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                BtnGuardarActionPerformed(evt);
             }
         });
-        jToolBar2.add(jButton6);
+        jToolBar2.add(BtnGuardar);
 
-        jButton7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/texteditor/Imagenes/abrir.png"))); // NOI18N
-        jButton7.setFocusable(false);
-        jButton7.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton7.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton7.addMouseListener(new java.awt.event.MouseAdapter() {
+        BtnAbrir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/texteditor/Imagenes/abrir.png"))); // NOI18N
+        BtnAbrir.setFocusable(false);
+        BtnAbrir.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        BtnAbrir.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        BtnAbrir.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton7MouseClicked(evt);
+                BtnAbrirMouseClicked(evt);
             }
         });
-        jToolBar2.add(jButton7);
+        BtnAbrir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnAbrirActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(BtnAbrir);
+
+        BtnUrl.setText("jButton1");
+        BtnUrl.setFocusable(false);
+        BtnUrl.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        BtnUrl.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        BtnUrl.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnUrlActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(BtnUrl);
+        jToolBar2.add(txtURL);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -213,8 +244,8 @@ public class Principal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(59, 59, 59)
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 590, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(94, 94, 94)
-                .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(39, 39, 39)
+                .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -324,78 +355,75 @@ public class Principal extends javax.swing.JFrame {
                 true);
     }//GEN-LAST:event_cb_fontItemStateChanged
 
-    private void jButton6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton6MouseClicked
+    private void BtnGuardarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BtnGuardarMouseClicked
         JFileChooser jfc = new JFileChooser();
-        FileNameExtensionFilter filtro = 
-                    new FileNameExtensionFilter(
-                            "El Inge Docs", "omf");
-         jfc.setFileFilter(filtro); 
-        int seleccion = jfc.showSaveDialog(this); 
-       
+        FileNameExtensionFilter filtro
+                = new FileNameExtensionFilter(
+                        "Documentos", "txt");
+        jfc.setFileFilter(filtro);
+        int seleccion = jfc.showSaveDialog(this);
+
         FileOutputStream fw = null;
         ObjectOutputStream bw = null;
         if (seleccion == JFileChooser.APPROVE_OPTION) {
-             try {
-                 
-                  File fichero=null;
+            try {
+
+                File fichero = null;
                 if (jfc.getFileFilter().getDescription().equals(
-                        "El Inge Docs")) {
-                    fichero = 
-                        new File(jfc.getSelectedFile().getPath()+".omf");
-                }else{
+                        "Documentos")) {
+                    fichero
+                            = new File(jfc.getSelectedFile().getPath() + ".txt");
+                } else {
                     fichero = jfc.getSelectedFile();
-                }   
-                
+                }
+
                 fw = new FileOutputStream(fichero);
                 bw = new ObjectOutputStream(fw);
-                Documento d=new Documento(tp_texto,doc,estilo);
+                Documento d = new Documento(tp_texto, doc, estilo);
                 bw.writeObject(d);
                 bw.flush();
-                
-                JOptionPane.showMessageDialog(this, 
-                        "Archivo guardado exitosamente");  
-                
+
+                JOptionPane.showMessageDialog(this,
+                        "Archivo guardado exitosamente");
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
-                               
+
         }//fin IF
         try {
-                    bw.close();
-                    fw.close();
-                } catch (IOException ex) {
-           } 
-        
-    }//GEN-LAST:event_jButton6MouseClicked
+            bw.close();
+            fw.close();
+        } catch (IOException ex) {
+        }
 
-    private void jButton7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton7MouseClicked
+    }//GEN-LAST:event_BtnGuardarMouseClicked
+
+    private void BtnAbrirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BtnAbrirMouseClicked
         // TODO add your handling code here:
         File fichero = null;
         FileInputStream entrada = null;
-        ObjectInputStream objeto = null;        
+        ObjectInputStream objeto = null;
         try {
             JFileChooser jfc = new JFileChooser();
-            FileNameExtensionFilter filtro = 
-                    new FileNameExtensionFilter(
-                            "EXAMEN", "omf");
-            jfc.setFileFilter(filtro);                   
+            FileNameExtensionFilter filtro
+                    = new FileNameExtensionFilter(
+                            "Documentos", "txt");
+            jfc.setFileFilter(filtro);
             int seleccion = jfc.showOpenDialog(this);
-            if (seleccion == JFileChooser.APPROVE_OPTION)
-            {
-               fichero = jfc.getSelectedFile();
+            if (seleccion == JFileChooser.APPROVE_OPTION) {
+                fichero = jfc.getSelectedFile();
                 entrada
-                    = new FileInputStream(fichero);
-                 objeto
-                    = new ObjectInputStream(entrada);              
-               tp_texto.setText("");  
-               Documento temp=(Documento)objeto.readObject();
-               tp_texto.setText( ((Documento)  temp  ).getPanel().getText() );
-               tp_texto.setDocument( ((Documento)temp  ).getDoc()   ) ;
-                
-               
-               
+                        = new FileInputStream(fichero);
+                objeto
+                        = new ObjectInputStream(entrada);
+                tp_texto.setText("");
+                Documento temp = (Documento) objeto.readObject();
+                tp_texto.setText(((Documento) temp).getPanel().getText());
+                tp_texto.setDocument(((Documento) temp).getDoc());
+
             } //fin if
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -405,7 +433,8 @@ public class Principal extends javax.swing.JFrame {
         } catch (IOException ex) {
         }
 
-    }//GEN-LAST:event_jButton7MouseClicked
+    }//GEN-LAST:event_BtnAbrirMouseClicked
+
 
     private void BtnColorSubrayadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnColorSubrayadoActionPerformed
         // TODO add your handling code here:
@@ -415,13 +444,100 @@ public class Principal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_BtnSubrayadoActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void BtnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnGuardarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_BtnGuardarActionPerformed
 
     private void BtnNegritaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnNegritaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_BtnNegritaActionPerformed
+
+    private void BtnColorTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnColorTextActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BtnColorTextActionPerformed
+
+    private void BtnAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAbrirActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BtnAbrirActionPerformed
+
+    private void BtnUrlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnUrlActionPerformed
+
+        String DIRECCION = txtURL.getText();
+        String codificacion = StandardCharsets.ISO_8859_1.toString();
+        File f;
+        FileWriter w;
+        BufferedWriter bw;
+        PrintWriter wr;
+        //variables para la lectura
+        FileReader fr;
+        BufferedReader br;
+        try {
+            //creamos el arhico lo guardamos para luego buscarlo
+            f = new File("prueba.txt");
+            //variables para guardar
+            //  f =new File("prueba.txt");
+            w = new FileWriter(f);
+            bw = new BufferedWriter(w);
+            wr = new PrintWriter(bw);
+            //declarar lecturas
+            /*fr=new FileReader(f);
+            br =new BufferedReader(fr);
+            String linea;*/
+           // File fichero = null;
+            FileInputStream entrada = null;
+            ObjectInputStream objeto = null;
+
+            //variables para la url
+            URL url = new URL(DIRECCION);
+            URLConnection conexion = url.openConnection();
+
+            // Determinación del tipo de codificación:
+            String tipoContenido = conexion.getContentType();
+            int indiceInicioCodificacion = tipoContenido.indexOf("charset=");
+
+            if (indiceInicioCodificacion != -1) {
+                codificacion = tipoContenido.substring(indiceInicioCodificacion + 8);
+            }
+
+            // Lectura del contenido del documento HTML:
+            InputStream is = new BufferedInputStream(conexion.getInputStream());
+            Reader r = new InputStreamReader(is, codificacion);
+            int caracter;
+
+            while ((caracter = r.read()) != -1) {
+                wr.write((char) caracter);
+
+                //System.out.print((char) caracter);
+            }
+            
+             entrada = new FileInputStream(f);
+                objeto = new ObjectInputStream(entrada);
+                tp_texto.setText("");
+                Documento temp = (Documento) objeto.readObject();
+                tp_texto.setText(((Documento) temp).getPanel().getText());
+                tp_texto.setDocument(((Documento) temp).getDoc());
+
+            
+            /* while((linea=br.readLine())!=null){
+                 System.out.println(linea);
+             }
+             */
+            wr.close();
+            bw.close();
+            // br.close();
+            //fr.close();
+        } catch (MalformedURLException e) {
+            System.err.println("La URL está mal formada.");
+
+        } catch (IOException e) {
+            System.err.println("Error de entrada/salida: " + e.getMessage());
+        }
+        catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
+    }//GEN-LAST:event_BtnUrlActionPerformed
 
     /**
      * @param args the command line arguments
@@ -459,21 +575,23 @@ public class Principal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BtnAbrir;
     private javax.swing.JButton BtnColorSubrayado;
     private javax.swing.JButton BtnColorText;
     private javax.swing.JButton BtnCursiva;
+    private javax.swing.JButton BtnGuardar;
     private javax.swing.JButton BtnNegrita;
     private javax.swing.JButton BtnSubrayado;
+    private javax.swing.JButton BtnUrl;
     private javax.swing.JComboBox<String> cb_font;
     private javax.swing.JComboBox<String> cb_tamaño;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
     private javax.swing.JTextPane tp_texto;
+    private javax.swing.JTextField txtURL;
     // End of variables declaration//GEN-END:variables
 
     StyledDocument doc;
