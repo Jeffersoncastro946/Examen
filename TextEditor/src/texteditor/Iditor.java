@@ -40,17 +40,17 @@ import javax.swing.text.StyledDocument;
  *
  * @author osman.mejia
  */
-public class Principal extends javax.swing.JFrame {
+public class Iditor extends javax.swing.JFrame {
 
     /**
      * Creates new form Principal
      */
-    public Principal() {
+    public Iditor() {
         initComponents();
         doc = tp_texto.getStyledDocument();
         estilo = tp_texto.addStyle("miEstilo", null);
 
-        DefaultComboBoxModel modelo = (DefaultComboBoxModel) cb_font.getModel();
+        DefaultComboBoxModel modelo=(DefaultComboBoxModel) cb_font.getModel();
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         String fontNames[] = ge.getAvailableFontFamilyNames();
         for (int i = 0; i < fontNames.length; i++) {
@@ -86,6 +86,8 @@ public class Principal extends javax.swing.JFrame {
         BtnAbrir = new javax.swing.JButton();
         BtnUrl = new javax.swing.JButton();
         txtURL = new javax.swing.JTextField();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Editor Texto");
@@ -233,20 +235,27 @@ public class Principal extends javax.swing.JFrame {
         jToolBar2.add(BtnUrl);
         jToolBar2.add(txtURL);
 
+        jTextArea1.setEditable(false);
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane2.setViewportView(jTextArea1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(49, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 890, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(43, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(59, 59, 59)
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 590, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(39, 39, 39)
-                .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 557, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 475, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 590, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(39, 39, 39)
+                        .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(45, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -256,7 +265,9 @@ public class Principal extends javax.swing.JFrame {
                     .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 442, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2))
                 .addContainerGap())
         );
 
@@ -357,73 +368,76 @@ public class Principal extends javax.swing.JFrame {
 
     private void BtnGuardarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BtnGuardarMouseClicked
         JFileChooser jfc = new JFileChooser();
-        FileNameExtensionFilter filtro
-                = new FileNameExtensionFilter(
-                        "Documentos", "txt");
-        jfc.setFileFilter(filtro);
-        int seleccion = jfc.showSaveDialog(this);
-
+        FileNameExtensionFilter filtro = 
+                    new FileNameExtensionFilter(
+                            "Documentos", "txt");
+         jfc.setFileFilter(filtro); 
+        int seleccion = jfc.showSaveDialog(this); 
+       
         FileOutputStream fw = null;
         ObjectOutputStream bw = null;
         if (seleccion == JFileChooser.APPROVE_OPTION) {
-            try {
-
-                File fichero = null;
+             try {
+                 
+                  File fichero=null;
                 if (jfc.getFileFilter().getDescription().equals(
                         "Documentos")) {
-                    fichero
-                            = new File(jfc.getSelectedFile().getPath() + ".txt");
-                } else {
+                    fichero = 
+                        new File(jfc.getSelectedFile().getPath()+".txt");
+                }else{
                     fichero = jfc.getSelectedFile();
-                }
-
+                }   
+                
                 fw = new FileOutputStream(fichero);
                 bw = new ObjectOutputStream(fw);
-                Documento d = new Documento(tp_texto, doc, estilo);
+                Documento d=new Documento(tp_texto,doc,estilo);
                 bw.writeObject(d);
                 bw.flush();
-
-                JOptionPane.showMessageDialog(this,
-                        "Archivo guardado exitosamente");
-
+                
+                JOptionPane.showMessageDialog(this, 
+                        "Archivo guardado exitosamente");  
+                
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
+                               
         }//fin IF
         try {
-            bw.close();
-            fw.close();
-        } catch (IOException ex) {
-        }
-
+                    bw.close();
+                    fw.close();
+                } catch (IOException ex) {
+           } 
+        
     }//GEN-LAST:event_BtnGuardarMouseClicked
 
     private void BtnAbrirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BtnAbrirMouseClicked
         // TODO add your handling code here:
         File fichero = null;
         FileInputStream entrada = null;
-        ObjectInputStream objeto = null;
+        ObjectInputStream objeto = null;        
         try {
             JFileChooser jfc = new JFileChooser();
-            FileNameExtensionFilter filtro
-                    = new FileNameExtensionFilter(
+            FileNameExtensionFilter filtro = 
+                    new FileNameExtensionFilter(
                             "Documentos", "txt");
-            jfc.setFileFilter(filtro);
+            jfc.setFileFilter(filtro);                   
             int seleccion = jfc.showOpenDialog(this);
-            if (seleccion == JFileChooser.APPROVE_OPTION) {
-                fichero = jfc.getSelectedFile();
+            if (seleccion == JFileChooser.APPROVE_OPTION)
+            {
+               fichero = jfc.getSelectedFile();
                 entrada
-                        = new FileInputStream(fichero);
-                objeto
-                        = new ObjectInputStream(entrada);
-                tp_texto.setText("");
-                Documento temp = (Documento) objeto.readObject();
-                tp_texto.setText(((Documento) temp).getPanel().getText());
-                tp_texto.setDocument(((Documento) temp).getDoc());
-
+                    = new FileInputStream(fichero);
+                 objeto
+                    = new ObjectInputStream(entrada);              
+               tp_texto.setText("");  
+               Documento temp=(Documento)objeto.readObject();
+               tp_texto.setText( ((Documento)  temp  ).getPanel().getText() );
+               tp_texto.setDocument( ((Documento)temp  ).getDoc()   ) ;
+                
+               
+               
             } //fin if
-
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -434,8 +448,10 @@ public class Principal extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_BtnAbrirMouseClicked
-
-
+    
+    
+    
+    
     private void BtnColorSubrayadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnColorSubrayadoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_BtnColorSubrayadoActionPerformed
@@ -461,32 +477,35 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_BtnAbrirActionPerformed
 
     private void BtnUrlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnUrlActionPerformed
-
+//        tp_texto.setEnabled(false);
+        
         String DIRECCION = txtURL.getText();
         String codificacion = StandardCharsets.ISO_8859_1.toString();
-        File f;
-        FileWriter w;
-        BufferedWriter bw;
-        PrintWriter wr;
-        //variables para la lectura
-        FileReader fr;
-        BufferedReader br;
+         File f;
+         //declaracion para guardar
+          FileWriter w;
+          BufferedWriter bw;
+          PrintWriter wr;
+                   //variables para la lectura
+            FileReader fr;
+            BufferedReader br;
         try {
             //creamos el arhico lo guardamos para luego buscarlo
-            f = new File("prueba.txt");
-            //variables para guardar
-            //  f =new File("prueba.txt");
-            w = new FileWriter(f);
-            bw = new BufferedWriter(w);
-            wr = new PrintWriter(bw);
-            //declarar lecturas
-            /*fr=new FileReader(f);
+            f =new File("prueba.txt");
+            //estoy itanciando los valores para guardar
+            w=new FileWriter(f);
+            bw=new BufferedWriter(w);
+            wr =new PrintWriter(bw);
+            
+               
+        
+            
+           //declarar lecturas
+            fr=new FileReader(f);
             br =new BufferedReader(fr);
-            String linea;*/
-           // File fichero = null;
-            FileInputStream entrada = null;
-            ObjectInputStream objeto = null;
-
+            String linea;
+            
+            
             //variables para la url
             URL url = new URL(DIRECCION);
             URLConnection conexion = url.openConnection();
@@ -503,40 +522,31 @@ public class Principal extends javax.swing.JFrame {
             InputStream is = new BufferedInputStream(conexion.getInputStream());
             Reader r = new InputStreamReader(is, codificacion);
             int caracter;
-
+             
             while ((caracter = r.read()) != -1) {
                 wr.write((char) caracter);
-
+                //wr.write("\n");
                 //System.out.print((char) caracter);
             }
             
-             entrada = new FileInputStream(f);
-                objeto = new ObjectInputStream(entrada);
-                tp_texto.setText("");
-                Documento temp = (Documento) objeto.readObject();
-                tp_texto.setText(((Documento) temp).getPanel().getText());
-                tp_texto.setDocument(((Documento) temp).getDoc());
-
-            
-            /* while((linea=br.readLine())!=null){
-                 System.out.println(linea);
+                
+             while((linea=br.readLine())!=null){
+                 jTextArea1.append(linea);
+                 linea=br.readLine();
              }
-             */
+            
             wr.close();
             bw.close();
-            // br.close();
-            //fr.close();
+            br.close();
+            fr.close();
         } catch (MalformedURLException e) {
             System.err.println("La URL está mal formada.");
 
         } catch (IOException e) {
             System.err.println("Error de entrada/salida: " + e.getMessage());
-        }
-        catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-
+        } 
+        
+        
     }//GEN-LAST:event_BtnUrlActionPerformed
 
     /**
@@ -556,20 +566,21 @@ public class Principal extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Iditor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Iditor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Iditor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Iditor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Principal().setVisible(true);
+                new Iditor().setVisible(true);
             }
         });
     }
@@ -586,8 +597,10 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cb_font;
     private javax.swing.JComboBox<String> cb_tamaño;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
     private javax.swing.JTextPane tp_texto;
