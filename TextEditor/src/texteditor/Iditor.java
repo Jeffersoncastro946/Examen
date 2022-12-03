@@ -9,17 +9,6 @@ import java.awt.Color;
 import java.awt.GraphicsEnvironment;
 import java.awt.HeadlessException;
 import java.io.*;
-/*import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Reader;*/
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -72,6 +61,7 @@ public class Iditor extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        txtURL = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tp_texto = new javax.swing.JTextPane();
         jToolBar1 = new javax.swing.JToolBar();
@@ -88,7 +78,6 @@ public class Iditor extends javax.swing.JFrame {
         BtnGuardar = new javax.swing.JButton();
         BtnAbrir = new javax.swing.JButton();
         BtnUrl = new javax.swing.JButton();
-        txtURL = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
 
@@ -235,7 +224,6 @@ public class Iditor extends javax.swing.JFrame {
             }
         });
         jToolBar2.add(BtnUrl);
-        jToolBar2.add(txtURL);
 
         jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
