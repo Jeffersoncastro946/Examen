@@ -7,6 +7,7 @@ package texteditor;
 
 import java.awt.Color;
 import java.awt.GraphicsEnvironment;
+import java.awt.HeadlessException;
 import java.io.*;
 /*import java.io.BufferedReader;
 import java.io.File;
@@ -47,12 +48,12 @@ public class Iditor extends javax.swing.JFrame {
      */
     public Iditor() {
         initComponents();
-         jTextArea1.setEnabled(false);
+        jTextArea1.setEnabled(false);
         // BtnNegrita.setEnabled(false);
         doc = tp_texto.getStyledDocument();
         estilo = tp_texto.addStyle("miEstilo", null);
 
-        DefaultComboBoxModel modelo=(DefaultComboBoxModel) cb_font.getModel();
+        DefaultComboBoxModel modelo = (DefaultComboBoxModel) cb_font.getModel();
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         String fontNames[] = ge.getAvailableFontFamilyNames();
         for (int i = 0; i < fontNames.length; i++) {
@@ -225,8 +226,7 @@ public class Iditor extends javax.swing.JFrame {
         });
         jToolBar2.add(BtnAbrir);
 
-        BtnUrl.setText("jButton1");
-        BtnUrl.setFocusable(false);
+        BtnUrl.setIcon(new javax.swing.ImageIcon(getClass().getResource("/texteditor/Imagenes/url.png"))); // NOI18N
         BtnUrl.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         BtnUrl.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         BtnUrl.addActionListener(new java.awt.event.ActionListener() {
@@ -251,24 +251,25 @@ public class Iditor extends javax.swing.JFrame {
                 .addGap(59, 59, 59)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 814, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 982, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 590, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(30, 30, 30)
                         .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(11, 11, 11)
-                        .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap()
+                        .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 442, Short.MAX_VALUE)
@@ -292,7 +293,7 @@ public class Iditor extends javax.swing.JFrame {
                     tp_texto.getSelectionEnd() - tp_texto.getSelectionStart(),
                     tp_texto.getStyle("miEstilo"),
                     true);
-        } catch (Exception ex) {
+        } catch (HeadlessException ex) {
         }
     }//GEN-LAST:event_BtnColorSubrayadoMouseClicked
 
@@ -309,7 +310,7 @@ public class Iditor extends javax.swing.JFrame {
                     tp_texto.getSelectionEnd() - tp_texto.getSelectionStart(),
                     tp_texto.getStyle("miEstilo"),
                     true);
-        } catch (Exception ex) {
+        } catch (HeadlessException ex) {
         }
     }//GEN-LAST:event_BtnColorTextMouseClicked
 
@@ -373,76 +374,73 @@ public class Iditor extends javax.swing.JFrame {
 
     private void BtnGuardarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BtnGuardarMouseClicked
         JFileChooser jfc = new JFileChooser();
-        FileNameExtensionFilter filtro = 
-                    new FileNameExtensionFilter(
-                            "Documentos", "txt");
-         jfc.setFileFilter(filtro); 
-        int seleccion = jfc.showSaveDialog(this); 
-       
+        FileNameExtensionFilter filtro
+                = new FileNameExtensionFilter(
+                        "Documentos", "txt");
+        jfc.setFileFilter(filtro);
+        int seleccion = jfc.showSaveDialog(this);
+
         FileOutputStream fw = null;
         ObjectOutputStream bw = null;
         if (seleccion == JFileChooser.APPROVE_OPTION) {
-             try {
-                 
-                  File fichero=null;
+            try {
+
+                File fichero = null;
                 if (jfc.getFileFilter().getDescription().equals(
                         "Documentos")) {
-                    fichero = 
-                        new File(jfc.getSelectedFile().getPath()+".txt");
-                }else{
+                    fichero
+                            = new File(jfc.getSelectedFile().getPath() + ".txt");
+                } else {
                     fichero = jfc.getSelectedFile();
-                }   
-                
+                }
+
                 fw = new FileOutputStream(fichero);
                 bw = new ObjectOutputStream(fw);
-                Documento d=new Documento(tp_texto,doc,estilo);
+                Documento d = new Documento(tp_texto, doc, estilo);
                 bw.writeObject(d);
                 bw.flush();
-                
-                JOptionPane.showMessageDialog(this, 
-                        "Archivo guardado exitosamente");  
-                
+
+                JOptionPane.showMessageDialog(this,
+                        "Archivo guardado exitosamente");
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
-                               
+
         }//fin IF
         try {
-                    bw.close();
-                    fw.close();
-                } catch (IOException ex) {
-           } 
-        
+            bw.close();
+            fw.close();
+        } catch (IOException ex) {
+        }
+
     }//GEN-LAST:event_BtnGuardarMouseClicked
 
     private void BtnAbrirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BtnAbrirMouseClicked
         // TODO add your handling code here:
         File fichero = null;
         FileInputStream entrada = null;
-        ObjectInputStream objeto = null;        
+        ObjectInputStream objeto = null;
         try {
             JFileChooser jfc = new JFileChooser();
-            FileNameExtensionFilter filtro = 
-                    new FileNameExtensionFilter(
+            FileNameExtensionFilter filtro
+                    = new FileNameExtensionFilter(
                             "Documentos", "txt");
-            jfc.setFileFilter(filtro);                   
+            jfc.setFileFilter(filtro);
             int seleccion = jfc.showOpenDialog(this);
-            if (seleccion == JFileChooser.APPROVE_OPTION)
-            {
-               fichero = jfc.getSelectedFile();
+            if (seleccion == JFileChooser.APPROVE_OPTION) {
+                fichero = jfc.getSelectedFile();
                 entrada
-                    = new FileInputStream(fichero);
-                 objeto
-                    = new ObjectInputStream(entrada);              
-               tp_texto.setText("");  
-               Documento temp=(Documento)objeto.readObject();
-               tp_texto.setText( ((Documento)  temp  ).getPanel().getText() );
-               tp_texto.setDocument( ((Documento)temp  ).getDoc()   ) ;
-                
-               
-               
+                        = new FileInputStream(fichero);
+                objeto
+                        = new ObjectInputStream(entrada);
+                tp_texto.setText("");
+                Documento temp = (Documento) objeto.readObject();
+                tp_texto.setText(((Documento) temp).getPanel().getText());
+                tp_texto.setDocument(((Documento) temp).getDoc());
+
             } //fin if
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -453,10 +451,8 @@ public class Iditor extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_BtnAbrirMouseClicked
-    
-    
-    
-    
+
+
     private void BtnColorSubrayadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnColorSubrayadoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_BtnColorSubrayadoActionPerformed
@@ -483,34 +479,30 @@ public class Iditor extends javax.swing.JFrame {
 
     private void BtnUrlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnUrlActionPerformed
 //        tp_texto.setEnabled(false);
-       
+
         String DIRECCION = txtURL.getText();
         String codificacion = StandardCharsets.ISO_8859_1.toString();
-         File f;
-         //declaracion para guardar
-          FileWriter w;
-          BufferedWriter bw;
-          PrintWriter wr;
-                   //variables para la lectura
-            FileReader fr;
-            BufferedReader br;
+        File f;
+        //declaracion para guardar
+        FileWriter w;
+        BufferedWriter bw;
+        PrintWriter wr;
+        //variables para la lectura
+        FileReader fr;
+        BufferedReader br;
         try {
             //creamos el arhico lo guardamos para luego buscarlo
-            f =new File("prueba.txt");
+            f = new File("prueba.txt");
             //estoy itanciando los valores para guardar
-            w=new FileWriter(f);
-            bw=new BufferedWriter(w);
-            wr =new PrintWriter(bw);
-            
-               
-        
-            
-           //declarar lecturas
-            fr=new FileReader(f);
-            br =new BufferedReader(fr);
+            w = new FileWriter(f);
+            bw = new BufferedWriter(w);
+            wr = new PrintWriter(bw);
+
+            //declarar lecturas
+            fr = new FileReader(f);
+            br = new BufferedReader(fr);
             String linea;
-            
-            
+
             //variables para la url
             URL url = new URL(DIRECCION);
             URLConnection conexion = url.openConnection();
@@ -527,20 +519,19 @@ public class Iditor extends javax.swing.JFrame {
             InputStream is = new BufferedInputStream(conexion.getInputStream());
             Reader r = new InputStreamReader(is, codificacion);
             int caracter;
-             
+
             while ((caracter = r.read()) != -1) {
                 wr.write((char) caracter);
                 //wr.write("\n");
                 //System.out.print((char) caracter);
             }
-            
-                
-             while((linea=br.readLine())!=null){
-                   jTextArea1.append(linea);
-                 linea=br.readLine();
-             }
-            
-             tp_texto.setText(jTextArea1.getText());
+
+            while ((linea = br.readLine()) != null) {
+                jTextArea1.append(linea);
+                linea = br.readLine();
+            }
+
+            tp_texto.setText(jTextArea1.getText());
             wr.close();
             bw.close();
             br.close();
@@ -550,9 +541,9 @@ public class Iditor extends javax.swing.JFrame {
 
         } catch (IOException e) {
             System.err.println("Error de entrada/salida: " + e.getMessage());
-        } 
-        
-        
+        }
+
+
     }//GEN-LAST:event_BtnUrlActionPerformed
 
     /**

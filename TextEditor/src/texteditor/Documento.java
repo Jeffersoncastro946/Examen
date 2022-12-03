@@ -5,7 +5,8 @@ import javax.swing.JTextPane;
 import javax.swing.text.Style;
 import javax.swing.text.StyledDocument;
 
-public class Documento implements Serializable{
+public class Documento implements Serializable {
+
     private JTextPane panel;
     private StyledDocument doc;
     private Style estilo;
@@ -44,7 +45,5 @@ public class Documento implements Serializable{
     public String toString() {
         return "Documento{" + "panel=" + panel + ", doc=" + doc + ", estilo=" + estilo + '}';
     }
-    
-    
-    
+
 }
